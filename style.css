@@ -1,0 +1,28 @@
+#settingsDiv{
+	overflow: hidden;
+}
+.settingsTable{
+	width:100%;
+	min-width:700px;
+}
+.settingsTable td{
+	padding-left: 2px;
+	height: 23px;
+}
+.settingsTable span, label{
+	margin-left:2px;
+}
+.settingsTable .col1{
+	min-width:200px;
+}
+#tableBody{
+	height: 0px;
+	width: 100px
+}
+.hotkey_value{
+	width: 10px;
+	text-align: center;
+}
+.hotkey_values{
+	text-align: center;
+}
