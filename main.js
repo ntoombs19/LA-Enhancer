@@ -1,7 +1,7 @@
 /*	Author: Author Name
  *	Name: LA Enhancer
  *	Version: 1.00
- *	Client script: javascript:$.getScript('https://dl.dropboxusercontent.com/u/26362756/laEnhancer/test.js');void(0);
+ *	Client script: javascript:$.getScript('https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/main.js');void(0);
  */
 
 /**********************************************************************
@@ -9,7 +9,7 @@
  */
 var version = "1.10";
 var scriptName = "LA Enhancer"
-var scriptURL = "https://dl.dropboxusercontent.com/u/26362756/laEnhancer/";
+var scriptURL = "https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/";
 var updateNotesURL = "http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter&p=6785655&viewfull=1#post6785655";
 var working = true;
 var resourcesLoaded = false;
