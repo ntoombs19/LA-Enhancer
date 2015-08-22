@@ -1,0 +1,5 @@
+adapter: s3
+access_key_id: AKIAIFTUQD7LUKAP76HQ
+secret_access_key: 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
+bucket_name: laenhancer
+host: s3-website-us-west-2.amazonaws.com
