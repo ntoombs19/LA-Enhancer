@@ -8,16 +8,12 @@
  *	Global variables
  */
 var version = "1.10";
-var scriptName = "LA Enhancer";
-var scriptURL = "http://ntoombs19.github.io/LA-Enhancer/";
-var updateNotesURL = "http://ntoombs19.github.io/LA-Enhancer/";
+var scriptURL = "https://ntoombs19.github.io/LA-Enhancer/";
+var updateNotesURL = "http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter&p=6785655&viewfull=1#post6785655";
 var working = true;
-var resourcesLoaded = false;
-var scriptLoaded = false;
 var pagesLoaded = false;
 var filtersApplied = false;
 var cansend = true;
-var keySetMode = false;
 var hideRow = false;
 var editingKey = false;
 var troubleshoot = true;
