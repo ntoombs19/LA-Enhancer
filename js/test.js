@@ -109,11 +109,13 @@
 
 /***Init script***/
 	// Enables caching of loaded javascript before loading resources
-	if ($.jStorage.get("language") == null) {
-		setDefaultLanguage();
-	}
-	$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
-		checkPage();
+	$.getScript(scriptURL + "resources.js", function() {
+		if ($.jStorage.get("language") == null) {
+			setDefaultLanguage();
+		}
+		$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
+			checkPage();
+		});
 	});
 
 	function run(){
