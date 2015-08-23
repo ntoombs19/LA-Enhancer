@@ -8,7 +8,7 @@
  *	Global variables
  */
 var version = "1.10";
-var scriptName = "LA Enhancer"
+var scriptName = "LA Enhancer";
 var scriptURL = "http://ntoombs19.github.io/LA-Enhancer/";
 var updateNotesURL = "http://ntoombs19.github.io/LA-Enhancer/";
 var working = true;
