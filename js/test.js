@@ -113,7 +113,7 @@
 		if ($.jStorage.get("language") == null) {
 			setDefaultLanguage();
 		}
-		$.getScript(scriptURL + "js/lang/" + $.jStorage.get("language") + '.js', function() {
+		$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
 			checkPage();
 		});
 	});
@@ -1540,8 +1540,8 @@
 			//case "voyna-plemyon.ru":
 			//	$.jStorage.set("language", "ru");//russian
 			//	break;
-			//case "fyletikesmaxes.gr":
-			//	$.jStorage.set("language", "el");//greek
+			case "fyletikesmaxes.gr":
+				$.jStorage.set("language", "el");//greek
 			//	break;
 			//case "tribalwars.no.com":
 			//	$.jStorage.set("language", "no");//norwegian
@@ -1564,14 +1564,14 @@
 			//case "guerretribale.fr":
 			//	$.jStorage.set("language", "fr");//french
 			//	break;
-			//case "guerrastribales.es":
-			//	$.jStorage.set("language", "es");//spanish
+			case "guerrastribales.es":
+				$.jStorage.set("language", "es");//spanish
 			//	break;
 			//case "tribalwars.fi":
 			//	$.jStorage.set("language", "fi");//finnish
 			//	break;
-			//case "tribalwars.ae":
-			//	$.jStorage.set("language", "ar");//arabic
+			case "tribalwars.ae":
+				$.jStorage.set("language", "ar");//arabic
 			//	break;
 			//case "vojnaplemen.si":
 			//	$.jStorage.set("language", "sl");//slovene
@@ -1601,7 +1601,7 @@
 		if($.inArray(lang, availableLangs) < 0){
 			lang = "en";
 		}
-		var langFile = scriptURL + "js/lang/" + lang + ".js";
+		var langFile = scriptURL + "lang/" + lang + ".js";
 		$.getScript(langFile, function() {
 			$('#settingsDiv').remove();
 			profileList[0] = profile_10;
@@ -1622,7 +1622,7 @@
 		//$('#language').append("<option value='cs'>Čeština</option>");
 		//$('#language').append("<option value='ko'>한국어</option>");
 		//$('#language').append("<option value='ro'>Русский</option>");
-		//$('#language').append("<option value='el'>Ελληνικά</option>");
+		$('#language').append("<option value='el'>Ελληνικά</option>");
 		//$('#language').append("<option value='no'>Norsk</option>");
 		//$('#language').append("<option value='sk'>Slovenčina</option>");
 		//$('#language').append("<option value='hu'>Magyar</option>");
@@ -1632,7 +1632,7 @@
 		//$('#language').append("<option value='fr'>Français</option>");
 		$('#language').append("<option value='es'>Español</option>");
 		//$('#language').append("<option value='fi'>finnish</option>");
-		//$('#language').append("<option value='ar'>اللغة العربية</option>");
+		$('#language').append("<option value='ar'>اللغة العربية</option>");
 		//$('#language').append("<option value='sl'>Slovenščina</option>");
 		//$('#language').append("<option value='lt'>Lietuvių</option>");
 		//$('#language').append("<option value='hr'>Hrvatski</option>");
