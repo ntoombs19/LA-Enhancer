@@ -6,7 +6,7 @@
 /***Global variables***/
 	var version = "1.10";
 	var scriptName = "LA Enhancer"
-	var scriptURL = "https://dl.dropboxusercontent.com/u/26362756/laEnhancer/";
+	var scriptURL = "https://ntoombs19.github.io/LA-Enhancer/";
 	var updateNotesURL = "http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter&p=6785655&viewfull=1#post6785655";
 	var working = true;
 	var resourcesLoaded = false;
@@ -105,17 +105,15 @@
 		"priorityThreeButton": "Skip",
 		"defaultButton": "Skip"
 	};
-	var availableLangs = ["en", "es"];
+	var availableLangs = ["en", "es", "el", "ar"];
 
 /***Init script***/
 	// Enables caching of loaded javascript before loading resources
-	$.getScript(scriptURL + "resources.js", function() {
-		if ($.jStorage.get("language") == null) {
-			setDefaultLanguage();
-		}
-		$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
-			checkPage();
-		});
+	if ($.jStorage.get("language") == null) {
+		setDefaultLanguage();
+	}
+	$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
+		checkPage();
 	});
 
 	function run(){
