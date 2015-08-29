@@ -1,8 +1,7 @@
-/*	Author: Author Name
+/*	Author: ntoombs19
  *	Name: LA Enhancer
- *	Version: 1.00
- *	Client script: javascript:$.getScript('https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/main.js');void(0);
- */
+ *	Version: 1.10
+ *	Client script: javascript:$.getScript('https://dl.dropboxusercontent.com/u/26362756/laEnhancer/test.js');void(0); */
 
 /**********************************************************************
  *	Global variables
@@ -10,7 +9,7 @@
 var version = "1.10";
 var scriptName = "LA Enhancer"
 var scriptURL = "https://ntoombs19.github.io/LA-Enhancer/";
-var updateNotesURL = "https://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter&p=6785655&viewfull=1#post6785655";
+var updateNotesURL = "http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter&p=6785655&viewfull=1#post6785655";
 var working = true;
 var resourcesLoaded = false;
 var scriptLoaded = false;
@@ -20,7 +19,7 @@ var cansend = true;
 var keySetMode = false;
 var hideRow = false;
 var editingKey = false;
-var troubleshoot = true;
+var troubleshoot = false;
 var clearProfiles = false;
 var reason = [];
 var keyToEdit;
@@ -76,13 +75,13 @@ var s = {
 	next_village_units: 40
 };
 var keycodes = {
-    "a": 65,
-    "b": 66,
-    "c": 67,
-    "skip": 83,
-    "right": 39,
-    "left": 37,
-    "master": 77
+	"a": 65,
+	"b": 66,
+	"c": 67,
+	"skip": 83,
+	"right": 39,
+	"left": 37,
+	"master": 77
 };
 var keyPressSettings = {
 	"a_code": 65,
@@ -116,19 +115,20 @@ var availableLangs = ["en", "es", "el", "ar"];
  *	Init script
  */
 // Enables caching of loaded javascript before loading resources
-if ($.jStorage.get("language") == null) {
-	setDefaultLanguage();
-}
-$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
-	checkPage();
-});
+
+	if ($.jStorage.get("language") == null) {
+		setDefaultLanguage();
+	}
+	$.getScript(scriptURL + "lang/" + $.jStorage.get("language") + '.js', function() {
+		checkPage();
+	});
+
 
 function run(){
 	checkVersion();
 	checkWorking();
 	setVersion();
 	makeItPretty();
-	///setTWFilters();
 	showSettings();
 	turnOnHotkeys();
 	hotkeysOnOff();
@@ -155,7 +155,7 @@ function checkVersion(){
 		else{
 			Dialog.show("update_dialog", "This script has recently been updated to version <span style='font-weight:bold;'>" + version + "</span><br /><br/><a href='"+updateNotesURL+"' target='_blank'>See what's new</a>");
 		}
-		
+
 	} else {
 		//UI.SuccessMessage("Welcome to LA Enhancer", 1000);
 	}
@@ -193,29 +193,6 @@ function getVersion(){
 	return ver;
 }
 
-function setTWFilters(){
-	if($('#all_village_checkbox').prop('checked') == true){
-		$('#all_village_checkbox').click();
-		doTime(100);
-	}
-	if($('#attacked_checkbox').prop('checked') == false){
-		$('#attacked_checkbox').click();
-		doTime(100);
-	}
-	if($('#full_hauls_checkbox').prop('checked') == true){
-		$('#full_hauls_checkbox').click();
-		doTime(100);
-	}
-	if($('#full_losses_checkbox').prop('checked') == false){
-		$('#full_losses_checkbox').click();
-		doTime(100);
-	}
-	if($('#partial_losses_checkbox').prop('checked') == false){
-		$('#partial_losses_checkbox').click();
-		doTime(100);
-	}
-}
-
 /**********************************************************************
  *	 Auto page loading and settings creation
  */
@@ -236,13 +213,23 @@ function showAllRows() {
 function getPage(i, pages) {
 	if (i < pages) {
 		changeHeader(filter_41 + " " + (i + 1) + "/" + pages + " <img src='graphic/throbber.gif' height='24' width='24'></img>");
-		$.get(link[0] + window.game_data.village.id + "&order=" + userset[s.order_by] + "&dir" + userset[s.direction] + "&Farm_page=" + i + "&screen=am_farm", function(data) {
-			$('#plunder_list tr', data).slice(1).each(function() {
-				$('#plunder_list tr:last').after("<tr>" + $(this).html() + "</tr>");
-			});
-			setTimeout(function(){ 
-				getPage(i + 1, pages);
-			}, 1);
+		var url = link[0] + window.game_data.village.id + "&order=" + userset[s.order_by] + "&dir=" + userset[s.direction] + "&Farm_page=" + i + "&screen=am_farm";
+		$.ajax({
+			type: 'GET',
+			url: url,
+			dataType: "html",
+			error: function(xhr, statusText, error){
+				console.log("Get page failed with error: " + error);
+			},
+			success: function(data){
+				console.log($(data));
+				$('#plunder_list tr', data).slice(1).each(function() {
+					$('#plunder_list tr:last').after("<tr>" + $(this).html() + "</tr>");
+				});
+				setTimeout(function(){
+					getPage(i + 1, pages);
+				}, 1);
+			}
 		});
 	} else {
 		setTimeout(function() {
@@ -284,6 +271,7 @@ function getNewVillage(way) {
 	$.ajax({
 		type: "GET",
 		url: vlink,
+		dataType: "html",
 		error: function(xhr, statusText) {
 			alert("Error: " + statusText);
 			$('#fader').remove();
@@ -309,25 +297,25 @@ function getNewVillage(way) {
 	});
 }
 /*
-function getNewVillage(way){
-	if(way == "n")
-		UI.InfoMessage('Switching to next village...', 500);
-	else
-		UI.InfoMessage('Switching to previous village...', 500);
-	window.onkeydown = function(){};
-	cansend = false;
-	filtersApplied = false;
-	Timing.pause();
-	var vlink = link[0] + way + window.game_data.village.id + link[1];
-	window.location = vlink;
-}
-*/
+ function getNewVillage(way){
+ if(way == "n")
+ UI.InfoMessage('Switching to next village...', 500);
+ else
+ UI.InfoMessage('Switching to previous village...', 500);
+ window.onkeydown = function(){};
+ cansend = false;
+ filtersApplied = false;
+ Timing.pause();
+ var vlink = link[0] + way + window.game_data.village.id + link[1];
+ window.location = vlink;
+ }
+ */
 
 function showSettings(){
 	//$('#plunder_list').hide();
 	//$('#plunder_list_nav').hide();
 	$('head').append("<link type='text/css' rel='stylesheet' href='" + scriptURL +"css/style.css' />");
-	$("#contentContainer h3").eq(0).after($("<div class='vis'id='settingsDiv'><table class='settingsTable'><thead><tr><th colspan='5'class='vis'style='padding:0px;'><h4>" + filter_01 + " " + version + " - <a href='http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter'target='_blank'>" + filter_02 + "</a> - " + filter_42 + ": <select id='language'style='margin:0px;'onchange='loadLanguage($(&quot;#language&quot;).val())'></select><span style='font-size:10px;float:right;font-weight:normal;font-style:normal'>" + filter_03 + " <a href='http://forum.tribalwars.net/member.php?22739-ntoombs19'target='_blank'>ntoombs19</a>&nbsp;<div class='vis'style='float:right;text-align:center;line-height:100%;width:12px;height:12px;margin:0px 0px 0px 0px;position:relative;background-color:tan;opacity:.7'><a href='#'num='2'onclick='uglyHider($(this));return false;'>-</a></div></span></h4></th></tr></thead><tbody id='settingsBody'><tr><td class='col1'style='min-width:200px'><span>" + filter_04 + "</span>&nbsp;<input type='text'value=''size='3'maxlength='3'id='start_page'>&nbsp;<span>" + filter_05 + "</span>&nbsp;<input type='text'value=''size='3'maxlength='3'id='end_page'></td><td colspan='3'><span style='font-weight:bold'>" + filter_06 + "</span>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='enable_help'></td><td rowspan='5'valign='top'><form><input type='checkbox'id='all_none'>&nbsp;<label for='all_none'style='font-weight:bold'>" + filter_07 + "</label>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='report_help'><br><input type='checkbox'id='blue'><label for='blue'><img src='graphic/dots/blue.png'>&nbsp;" + filter_08 + "</label><br><input type='checkbox'id='green'><label for='green'><img src='graphic/dots/green.png'>&nbsp;" + filter_09 + "</label><br><input type='checkbox'id='yellow'><label for='yellow'><img src='graphic/dots/yellow.png'>&nbsp;" + filter_10 + "</label><br><input type='checkbox'id='red_yellow'><label for='red_yellow'><img src='graphic/dots/red_yellow.png'>&nbsp;" + filter_11 + "</label><br><input type='checkbox'id='red_blue'><label for='red_blue'><img src='graphic/dots/red_blue.png'>&nbsp;" + filter_12 + "</label><br><input type='checkbox'id='red'><label for='red'><img src='graphic/dots/red.png'>&nbsp;" + filter_13 + "</label></form></td></tr><tr><td rowspan='2'><label for='order_by'>" + filter_14 + ":</label>&nbsp;<select id='order_by'val='distance'><option value='distance'>" + filter_15 + "</option><option value='date'>" + filter_16 + "</option></select><br><label for='direction'>" + filter_17 + ":</label>&nbsp;<select id='direction'val='desc'><option value='asc'>" + filter_18 + "</option><option value='desc'>" + filter_19 + "</option></select></td><td style='width:26px'><input type='checkbox'id='enable_hauls'></td><td style='width:110px'><label for='enable_hauls'>" + filter_20 + "</label></td><td><input type='radio'name='hauls'id='full'><label for='full'><img src='graphic/max_loot/1.png'>" + filter_21 + "</label>&nbsp;<input type='radio'name='hauls'id='partial'><label for='partial'><img src='graphic/max_loot/0.png'>" + filter_22 + "</label></td></tr><tr><td><input type='checkbox'id='enable_attacks'></td><td><label for='enable_attacks'>" + filter_23 + "</label></td><td><select id='attack_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='attack_value'size='2'maxlength='2'value=''></td></tr><tr><td rowspan='1'><span style='font-weight:bold;'>"+filter_43+"</span></td><td><input type='checkbox'id='enable_walls'></td><td><label for='enable_walls'>" + filter_30 + "</label></td><td><select id='wall_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='wall_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox'id='next_village_no_farms'><label for='next_village_no_farms'>" + filter_39 + "</label></td><td><input type='checkbox'id='enable_distances'></td><td><label for='enable_distances'>" + filter_31 + "</label></td><td><select id='distance_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='distance_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox' id='next_village_units' />"+filter_44+"</td><td><input type='checkbox' id='enable_continents' /><td colspan='3'><select id='continent_display'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='continents_list'>" + filter_34 + "</label>&nbsp;<input type='text'size='3'maxlength='150'id='continents_list'value=''>&nbsp;<img src='graphic/questionmark.png'height='13'id='continent_help'></td></tr><tr><td><input type='checkbox' id='next_village_scouts' /><input type='text' size='3' id='scouts_left' /> "+filter_45+"</td><td><input type='checkbox'id='enable_scout'></td><td colspan='3'><label for='enable_scout'>" + filter_35 + "</label>&nbsp;<select id='scout_report_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='haul_value'size='9'maxlength='7'value=''></td></tr><tr><td><input type='checkbox' id='next_village_farming_troops' /><input type='text' size='3' id='farming_troops_left' /> "+filter_46+"</td><td><input type='checkbox'id='enable_time'></td><td colspan='3'><select id='attack_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='enable_time'>" + filter_36 + "</label>&nbsp;<input type='text'id='time_value'size='3'maxlength='4'value=''><span>" + filter_37 + "</span></td></tr><tr><td><input type='checkbox'id='enable_auto_run'><label for='enable_autoRun'>" + filter_38 + "</label></td><td><input type='checkbox' id='hide_recent_farms' /></td><td colspan='3'><select id='sent_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;"+filter_47+" <input type='text' size='3' id='hide_recent_time' /> "+filter_48+"</td></tr><tr><th>"+filter_49+"</th><th colspan='4'>"+filter_50+"</th></tr><tr><td rowspan='4'><table><tr class='hotkey_values'><td><a href='#'onclick='return setKeyEditMode(\"A\")'id='button_a'class='farm_icon farm_icon_a'></a></td><td><a href='#'onclick='return setKeyEditMode(\"B\")'id='button_b'class='farm_icon farm_icon_b'></a></td><td><a href='#'onclick='return setKeyEditMode(\"C\")'id='button_c'class='farm_icon farm_icon_c'></a></td><td><a href='#'onclick='return setKeyEditMode(\"Master\")'id='button_master'class='farm_icon farm_icon_m'></a></td></tr><tr class='hotkey_values'><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_a'value='A'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_b'value='B'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_c'value='C'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_master'value='M'></td></tr><tr class='hotkey_values'><td colspan='2'><input class='btn tooltip'onclick='return setKeyEditMode(\"Skip\")'type='button'value='Skip'style='margin:0px 0px 0px 0px'title='"+filter_51+"'></td><td><input class='btn tooltip'onclick='return setKeyEditMode(\"Left\")'type='button'value='⇚'style='margin:0px 0px 0px 0px'title='"+filter_52+"'></td><td><input class='btn tooltip'type='button'onclick='return setKeyEditMode(\"Right\")'value='⇛'style='margin:0px 0px 0px 0px'title='"+filter_53+"'></td></tr><tr class='hotkey_values'><td colspan='2'><input type='text'class='hotkey_value' READONLY id='hotkey_value_skip'value='S'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_left'value='&#8592;'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_right'value='&#8594;'></td></tr></table></td><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityOneEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityOneProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityOneButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityTwoEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityTwoProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityTwoButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityThreeEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityThreeProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityThreeButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td colspan='4'>"+filter_60+" <select id='defaultButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td colspan='5'><div style='float:left'><input type='submit'value='" + profile_02 + "'onclick='applySettings()'>&nbsp;<input type='submit'value='" + profile_03 + "'onclick='resetTable()'></div><div style='float:right'><img src='graphic/questionmark.png'width='13'height='13'id='profile_help'>&nbsp;<label for='settingsProfile'>" + profile_01 + ":</label>&nbsp;<select id='settingsProfile'onchange='changeProfile($(&quot;#settingsProfile&quot;).val())'></select>&nbsp;<input type='submit'value='" + profile_04 + "'onclick='createProfile()'>&nbsp;<input type='submit'value='" + profile_05 + "'onclick='setDefaultProfile()'>&nbsp;<input type='submit'value='" + profile_06 + "'onclick='deleteProfile()'>&nbsp;<input type='submit'value='" + profile_07 + "'onclick='updateProfile()'>&nbsp;<input type='submit'value='" + profile_08 + "'onclick='exportProfile()'>&nbsp;<input type='submit'value='" + profile_09 + "'onclick='importProfile()'></div></td></tr></tbody></table></div>"));
+	$("#contentContainer h3").eq(0).after($("<div class='vis'id='settingsDiv'><table class='settingsTable'><thead><tr><th colspan='5'class='vis'style='padding:0px;'><h4>" + filter_01 + " " + version + " - <a href='http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter'target='_blank'>" + filter_02 + "</a> - " + filter_42 + ": <select id='language'style='margin:0px;'onchange='loadLanguage($(&quot;#language&quot;).val())'></select><span style='font-size:10px;float:right;font-weight:normal;font-style:normal'>" + filter_03 + " <a href='http://forum.tribalwars.net/member.php?22739-ntoombs19'target='_blank'>ntoombs19</a>&nbsp;<div class='vis'style='float:right;text-align:center;line-height:100%;width:12px;height:12px;margin:0px 0px 0px 0px;position:relative;background-color:tan;opacity:.7'><a href='#'num='2'onclick='uglyHider($(this));return false;'>-</a></div></span></h4></th></tr></thead><tbody id='settingsBody'><tr><td class='col1'style='min-width:200px'><span>" + filter_04 + "</span>&nbsp;<input type='text'value=''size='1'maxlength='3'id='start_page'>&nbsp;<span>" + filter_05 + "</span>&nbsp;<input type='text'value=''size='1'maxlength='3'id='end_page'></td><td colspan='3'><span style='font-weight:bold'>" + filter_06 + "</span>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='enable_help'></td><td rowspan='5'valign='top'><form><input type='checkbox'id='all_none'>&nbsp;<label for='all_none'style='font-weight:bold'>" + filter_07 + "</label>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='report_help'><br><input type='checkbox'id='blue'><label for='blue'><img src='graphic/dots/blue.png'>&nbsp;" + filter_08 + "</label><br><input type='checkbox'id='green'><label for='green'><img src='graphic/dots/green.png'>&nbsp;" + filter_09 + "</label><br><input type='checkbox'id='yellow'><label for='yellow'><img src='graphic/dots/yellow.png'>&nbsp;" + filter_10 + "</label><br><input type='checkbox'id='red_yellow'><label for='red_yellow'><img src='graphic/dots/red_yellow.png'>&nbsp;" + filter_11 + "</label><br><input type='checkbox'id='red_blue'><label for='red_blue'><img src='graphic/dots/red_blue.png'>&nbsp;" + filter_12 + "</label><br><input type='checkbox'id='red'><label for='red'><img src='graphic/dots/red.png'>&nbsp;" + filter_13 + "</label></form></td></tr><tr><td rowspan='2'><label for='order_by'>" + filter_14 + ":</label>&nbsp;<select id='order_by'val='distance'><option value='distance'>" + filter_15 + "</option><option value='date'>" + filter_16 + "</option></select><br><label for='direction'>" + filter_17 + ":</label>&nbsp;<select id='direction'val='desc'><option value='asc'>" + filter_18 + "</option><option value='desc'>" + filter_19 + "</option></select></td><td style='width:26px'><input type='checkbox'id='enable_hauls'></td><td style='width:110px'><label for='enable_hauls'>" + filter_20 + "</label></td><td><input type='radio'name='hauls'id='full'><label for='full'><img src='graphic/max_loot/1.png'>" + filter_21 + "</label>&nbsp;<input type='radio'name='hauls'id='partial'><label for='partial'><img src='graphic/max_loot/0.png'>" + filter_22 + "</label></td></tr><tr><td><input type='checkbox'id='enable_attacks'></td><td><label for='enable_attacks'>" + filter_23 + "</label></td><td><select id='attack_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='attack_value'size='2'maxlength='2'value=''></td></tr><tr><td rowspan='1'><span style='font-weight:bold;'>"+filter_43+"</span></td><td><input type='checkbox'id='enable_walls'></td><td><label for='enable_walls'>" + filter_30 + "</label></td><td><select id='wall_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='wall_value'size='1'maxlength='2'value=''></td></tr><tr><td><input type='checkbox'id='next_village_no_farms'><label for='next_village_no_farms'>" + filter_39 + "</label></td><td><input type='checkbox'id='enable_distances'></td><td><label for='enable_distances'>" + filter_31 + "</label></td><td><select id='distance_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='distance_value'size='1'maxlength='2'value=''></td></tr><tr><td><input type='checkbox' id='next_village_units' />"+filter_44+"</td><td><input type='checkbox' id='enable_continents' /><td colspan='3'><select id='continent_display'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='continents_list'>" + filter_34 + "</label>&nbsp;<input type='text'size='1'maxlength='150'id='continents_list'value=''>&nbsp;<img src='graphic/questionmark.png'height='13'id='continent_help'></td></tr><tr><td><input type='checkbox' id='next_village_scouts' /><input type='text' size='1' id='scouts_left' /> "+filter_45+"</td><td><input type='checkbox'id='enable_scout'></td><td colspan='3'><label for='enable_scout'>" + filter_35 + "</label>&nbsp;<select id='scout_report_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='haul_value'size='9'maxlength='7'value=''></td></tr><tr><td><input type='checkbox' id='next_village_farming_troops' /><input type='text' size='1' id='farming_troops_left' /> "+filter_46+"</td><td><input type='checkbox'id='enable_time'></td><td colspan='3'><select id='attack_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='enable_time'>" + filter_36 + "</label>&nbsp;<input type='text'id='time_value'size='1'maxlength='4'value=''><span>" + filter_37 + "</span></td></tr><tr><td><input type='checkbox'id='enable_auto_run'><label for='enable_autoRun'>" + filter_38 + "</label></td><td><input type='checkbox' id='hide_recent_farms' /></td><td colspan='3'><select id='sent_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;"+filter_47+" <input type='text' size='1' id='hide_recent_time' /> "+filter_48+"</td></tr><tr><th>"+filter_49+"</th><th colspan='4'>"+filter_50+"</th></tr><tr><td rowspan='4'><table><tr class='hotkey_values'><td><a href='#'onclick='return setKeyEditMode(\"A\")'id='button_a'class='farm_icon farm_icon_a'></a></td><td><a href='#'onclick='return setKeyEditMode(\"B\")'id='button_b'class='farm_icon farm_icon_b'></a></td><td><a href='#'onclick='return setKeyEditMode(\"C\")'id='button_c'class='farm_icon farm_icon_c'></a></td><td><a href='#'onclick='return setKeyEditMode(\"Master\")'id='button_master'class='farm_icon farm_icon_m'></a></td></tr><tr class='hotkey_values'><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_a'value='A'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_b'value='B'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_c'value='C'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_master'value='M'></td></tr><tr class='hotkey_values'><td colspan='2'><input class='btn tooltip'onclick='return setKeyEditMode(\"Skip\")'type='button'value='Skip'style='margin:0px 0px 0px 0px'title='"+filter_51+"'></td><td><input class='btn tooltip'onclick='return setKeyEditMode(\"Left\")'type='button'value='⇚'style='margin:0px 0px 0px 0px'title='"+filter_52+"'></td><td><input class='btn tooltip'type='button'onclick='return setKeyEditMode(\"Right\")'value='⇛'style='margin:0px 0px 0px 0px'title='"+filter_53+"'></td></tr><tr class='hotkey_values'><td colspan='2'><input type='text'class='hotkey_value' READONLY id='hotkey_value_skip'value='S'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_left'value='&#8592;'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_right'value='&#8594;'></td></tr></table></td><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityOneEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityOneProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityOneButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityTwoEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityTwoProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityTwoButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityThreeEnabled'/></td><td colspan='3'>"+filter_54+" <select id='priorityThreeProfile' onchange='return updateKeypressSettings();'></select> "+filter_55+" <select id='priorityThreeButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td colspan='4'>"+filter_60+" <select id='defaultButton' onchange='return updateKeypressSettings();'><option val='"+filter_56+"'>"+filter_56+"</option><option val='"+filter_57+"'>"+filter_57+"</option><option val='"+filter_58+"'>"+filter_58+"</option><option val='"+filter_59+"'>"+filter_59+"</option></select></td></tr><tr><td colspan='5'><div style='float:left'><input type='submit'value='" + profile_02 + "'onclick='applySettings()'>&nbsp;<input type='submit'value='" + profile_03 + "'onclick='resetTable()'></div><div style='float:right'><img src='graphic/questionmark.png'width='13'height='13'id='profile_help'>&nbsp;<label for='settingsProfile'>" + profile_01 + ":</label>&nbsp;<select id='settingsProfile'onchange='changeProfile($(&quot;#settingsProfile&quot;).val())'></select>&nbsp;<input type='submit'value='" + profile_04 + "'onclick='createProfile()'>&nbsp;<input type='submit'value='" + profile_05 + "'onclick='setDefaultProfile()'>&nbsp;<input type='submit'value='" + profile_06 + "'onclick='deleteProfile()'>&nbsp;<input type='submit'value='" + profile_07 + "'onclick='updateProfile()'>&nbsp;<input type='submit'value='" + profile_08 + "'onclick='exportProfile()'>&nbsp;<input type='submit'value='" + profile_09 + "'onclick='importProfile()'></div></td></tr></tbody></table></div>"));
 	formatSettings();
 	addLanguages();
 	$("#language option[value='" + $.jStorage.get("language") + "']").attr("selected", "selected");
@@ -364,8 +352,8 @@ function formatSettings() {
 }
 
 function removeFirstPage() {
-    $('#plunder_list tr:gt(0)').remove();
-    $('#plunder_list_nav').hide();
+	$('#plunder_list tr:gt(0)').remove();
+	$('#plunder_list_nav').hide();
 }
 
 /**********************************************************************
@@ -373,28 +361,28 @@ function removeFirstPage() {
  */
 function customSendUnits(link, target_village, template_id, button) {
 	if(!checkIfNextVillage()){
-	    button.closest("tr").hide();
-	    link = $(link);
-	    if (link.hasClass('farm_icon_disabled')) return false;
+		button.closest("tr").hide();
+		link = $(link);
+		if (link.hasClass('farm_icon_disabled')) return false;
 
-	    var data = {
-	        target: target_village,
-	        template_id: template_id,
-	        source: game_data.village.id
-	    };
-	    $.post(Accountmanager.send_units_link, data, function (data) {
-	        if (data.error) {
-	        	if(userset[s.next_village_units] && data.error === "Not enough units available"){
-		        	if(cansend && filtersApplied)
+		var data = {
+			target: target_village,
+			template_id: template_id,
+			source: game_data.village.id
+		};
+		$.post(Accountmanager.send_units_link, data, function (data) {
+			if (data.error) {
+				if(userset[s.next_village_units] && data.error === "Not enough units available"){
+					if(cansend && filtersApplied)
 						getNewVillage("n");
-	        		return false;
-	        	} else {
-		            UI.ErrorMessage(data.error);
-		            button.closest("tr").show();
-		        }
-	        } else {
-	        	setLocalStorageRow(target_village);
-	            //$('.farm_village_' + target_village).addClass('farm_icon_disabled');
+					return false;
+				} else {
+					UI.ErrorMessage(data.error);
+					button.closest("tr").show();
+				}
+			} else {
+				setLocalStorageRow(target_village);
+				//$('.farm_village_' + target_village).addClass('farm_icon_disabled');
 				if (typeof $(button).prop('tooltipText') != 'undefined') {
 					var buttext = $(button).prop('tooltipText');
 				}
@@ -403,10 +391,10 @@ function customSendUnits(link, target_village, template_id, button) {
 				var sep1 = buttext.split("<br />");
 				sep1.splice(sep1.length - 2, 1);
 				UI.SuccessMessage(sep1.join(" "), 100);
-	            Accountmanager.farm.updateOwnUnitsAvailable(data.current_units);
-	        }
-	    }, 'json');
-	    return false
+				Accountmanager.farm.updateOwnUnitsAvailable(data.current_units);
+			}
+		}, 'json');
+		return false
 	}
 }
 
@@ -420,16 +408,16 @@ function customSendUnitsFromReport(link, target_village, report_id, button) {
 		};
 		$.post(Accountmanager.send_units_link_from_report, data, function (data) {
 			if (data.error) {
-	        	if(userset[s.next_village_units] && data.error === "Not enough units available"){
-	        		if(cansend && filtersApplied)
+				if(userset[s.next_village_units] && data.error === "Not enough units available"){
+					if(cansend && filtersApplied)
 						getNewVillage("n");
-	        		return false;
-	        	} else {
-		            UI.ErrorMessage(data.error);
-		            button.closest("tr").show();
-		        }
+					return false;
+				} else {
+					UI.ErrorMessage(data.error);
+					button.closest("tr").show();
+				}
 			} else {
-	        	setLocalStorageRow(target_village);
+				setLocalStorageRow(target_village);
 				if (typeof data.success === 'string') {
 					if (typeof $(button).prop('tooltipText') != 'undefined') {
 						var buttext = $(button).prop('tooltipText');
@@ -444,7 +432,7 @@ function customSendUnitsFromReport(link, target_village, report_id, button) {
 				//$('.report_' + target_village + ' .farm_icon').addClass('farm_icon_disabled')
 			}
 		}, 'json');
-	    return false
+		return false
 	}
 }
 
@@ -471,7 +459,7 @@ function addTableInfo(){
 				case 1:
 					$(this).filter(":first").before("<td style='width:10px;font-weight:bold;' id='rowNum'>"+(i+1)+"</td>")
 					break;
-				case 3:	
+				case 3:
 					var attackImg = $(this).find('img');
 					var tooltip= $(this).find('img').prop('tooltipText');
 					if(typeof tooltip != 'undefined'){
@@ -487,7 +475,7 @@ function addTableInfo(){
 					break;
 				case 10:
 					setOnclick($(this));
-					break;	
+					break;
 			}
 		});
 	});
@@ -536,10 +524,10 @@ function applySettings(){
 
 function applyFilters(){
 	$('#am_widget_Farm tr:gt(0)').each(function(i) {
-	    hideRow = checkRowToHide($(this), userset);
-	    if(hideRow){
-	    	$(this).hide();
-	    }
+		hideRow = checkRowToHide($(this), userset);
+		if(hideRow){
+			$(this).hide();
+		}
 	});
 	changeHeader(filter_40);
 	var topContainer = 0;
@@ -558,34 +546,34 @@ function applyFilters(){
 function checkRowToHide(row, profileArray){
 	hideRow = false;
 	row.children("td").each(function(cell){
-	    switch (cell) {
-	        case 2:
-	        	reportSettings($(this), profileArray);
-	            break;
-	        case 3:
-	        	haulSettings($(this), profileArray);
-	            break;
-	        case 4:
-	    		hideRecentlyFarmed($(this), profileArray);
-	        	attackSettings($(this), profileArray);
-	        	continentSettings($(this), profileArray);
-	            break;
-	        case 5:
-	        	hideTime($(this), profileArray);
-	        	break;
-	        case 6:
-	        	scoutReportSettings($(this), profileArray);
-	        	break;
-	        case 7:
-	        	wallSettings($(this), profileArray);
-	        	break;
-	        case 8:
-	        	distanceSettings($(this), profileArray);
-	        	break;
+		switch (cell) {
+			case 2:
+				reportSettings($(this), profileArray);
+				break;
+			case 3:
+				haulSettings($(this), profileArray);
+				break;
+			case 4:
+				hideRecentlyFarmed($(this), profileArray);
+				attackSettings($(this), profileArray);
+				continentSettings($(this), profileArray);
+				break;
+			case 5:
+				hideTime($(this), profileArray);
+				break;
+			case 6:
+				scoutReportSettings($(this), profileArray);
+				break;
+			case 7:
+				wallSettings($(this), profileArray);
+				break;
+			case 8:
+				distanceSettings($(this), profileArray);
+				break;
 		}
-    });
+	});
 	if(hideRow){
-		if(troubleshoot == true)
+		if(troubleshoot)
 			console.log(row.find("#rowNum").html() + ": (" + reason.join(',') + ")");
 		reason = [];
 		return true;
@@ -671,19 +659,18 @@ function hideRecentlyFarmed(cell, profileArray){
 		var t1 = currentGameTime;
 		var t2 = sentTime;
 		var dif = t1.getTime() - t2.getTime();
-		console.log("Sent Time: "+t2);
 		var minutesBetween = Math.abs(parseInt(dif/1000/60));
 		switch(profileArray[s.sent_time_filter]){
 			case "hide":
 				if(minutesBetween < parseInt(profileArray[s.hide_recent_time])){
-					reason.push("Village was sent to " + minutesBetween + " minutes ago");
+					reason.push("Village was recently sent to " + minutesBetween + " minutes ago");
 					hideRow = true;
 					return;
 				}
 				break;
 			case "show":
 				if(minutesBetween > parseInt(profileArray[s.hide_recent_time])){
-					reason.push("Village was not sent to");
+					reason.push("Village was not recently sent to");
 					hideRow = true;
 					return;
 				}
@@ -702,29 +689,28 @@ function attackSettings(cell, profileArray){
 		numAttacks = 0;
 	}
 	if(profileArray[s.enable_attacks]){
-		console.log(numAttacks);
-		switch (profileArray[s.attack_operator]) { 
-	        case "greater_than":
-	        	if(numAttacks > parseInt(profileArray[s.attack_value])){
-	        		reason.push("Outgoing attacks is too many");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "less_than":
-	        	if(numAttacks < parseInt(profileArray[s.attack_value])){
+		switch (profileArray[s.attack_operator]) {
+			case "greater_than":
+				if(numAttacks > parseInt(profileArray[s.attack_value])){
+					reason.push("Outgoing attacks is too many");
+					hideRow = true;
+					return;
+				}
+				break;
+			case "less_than":
+				if(numAttacks < parseInt(profileArray[s.attack_value])){
 					reason.push("Outgoing attacks is too few");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "equal_to":
-	        	if(numAttacks == parseInt(profileArray[s.attack_value])){
+					hideRow = true;
+					return;
+				}
+				break;
+			case "equal_to":
+				if(numAttacks == parseInt(profileArray[s.attack_value])){
 					reason.push("Outgoing attacks is equal");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break; 
+					hideRow = true;
+					return;
+				}
+				break;
 		}
 	}
 }
@@ -752,9 +738,8 @@ function hideTime(cell, profileArray){
 		var t1 = currentGameTime;
 		var t2 = getVillageAttackedTime(cell);
 		var dif = t1.getTime() - t2.getTime();
-		console.log("Plunder Time: "+t2);
 		var minutesBetween = Math.abs(parseInt(dif/1000/60));
-		switch (profileArray[s.attack_time_filter]) { 
+		switch (profileArray[s.attack_time_filter]) {
 			case "hide":
 				if(minutesBetween < parseInt(profileArray[s.time_value])){
 					reason.push("Village attacked "+ minutesBetween +" minutes ago.");
@@ -786,28 +771,28 @@ function scoutReportSettings(cell, profileArray){
 			total = wood+clay+iron;
 		}
 
-		switch (profileArray[s.scout_report_operator]) { 
-	        case "greater_than":
-	        	if(total > parseInt(profileArray[s.haul_value])){	
+		switch (profileArray[s.scout_report_operator]) {
+			case "greater_than":
+				if(total > parseInt(profileArray[s.haul_value])){
 					reason.push("Too many resources");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "less_than":
-	        	if(total < parseInt(profileArray[s.haul_value])){
+					hideRow = true;
+					return;
+				}
+				break;
+			case "less_than":
+				if(total < parseInt(profileArray[s.haul_value])){
 					reason.push("Not enough resources");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "equal_to":
-	        	if(total == parseInt(profileArray[s.haul_value])){
+					hideRow = true;
+					return;
+				}
+				break;
+			case "equal_to":
+				if(total == parseInt(profileArray[s.haul_value])){
 					reason.push("Exact resources");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break; 
+					hideRow = true;
+					return;
+				}
+				break;
 		}
 	}
 }
@@ -818,28 +803,28 @@ function wallSettings(cell, profileArray){
 		if(wallLvl == '?'){
 			wallLvl = 0;
 		}
-		switch ($.trim(profileArray[s.wall_operator])) { 
-	        case "greater_than":
-	        	if(wallLvl > parseInt(profileArray[s.wall_value])){	
-					reason.push("Wall too high");	
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "less_than":
-	        	if(wallLvl < parseInt(profileArray[s.wall_value])){
+		switch ($.trim(profileArray[s.wall_operator])) {
+			case "greater_than":
+				if(wallLvl > parseInt(profileArray[s.wall_value])){
+					reason.push("Wall too high");
+					hideRow = true;
+					return;
+				}
+				break;
+			case "less_than":
+				if(wallLvl < parseInt(profileArray[s.wall_value])){
 					reason.push("Wall too low");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "equal_to":
-	        	if(wallLvl == parseInt(profileArray[s.wall_value])){
-	        		reason.push("Wall is exact");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break; 
+					hideRow = true;
+					return;
+				}
+				break;
+			case "equal_to":
+				if(wallLvl == parseInt(profileArray[s.wall_value])){
+					reason.push("Wall is exact");
+					hideRow = true;
+					return;
+				}
+				break;
 		}
 	}
 }
@@ -847,28 +832,28 @@ function wallSettings(cell, profileArray){
 function distanceSettings(cell, profileArray){
 	if(profileArray[s.enable_distances]){
 		var distanceLvl = cell.html();
-		switch ($.trim(profileArray[s.distance_operator])) { 
-	        case "greater_than":
-	        	if(parseFloat(distanceLvl) > parseFloat(profileArray[s.distance_value])){	
-					reason.push("Village too far");	
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "less_than":
-	        	if(parseFloat(distanceLvl) < parseFloat(profileArray[s.distance_value])){
+		switch ($.trim(profileArray[s.distance_operator])) {
+			case "greater_than":
+				if(parseFloat(distanceLvl) > parseFloat(profileArray[s.distance_value])){
+					reason.push("Village too far");
+					hideRow = true;
+					return;
+				}
+				break;
+			case "less_than":
+				if(parseFloat(distanceLvl) < parseFloat(profileArray[s.distance_value])){
 					reason.push("Village too close");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break;
-	        case "equal_to":
-	        	if(parseFloat(distanceLvl) == parseFloat(profileArray[s.distance_value])){
+					hideRow = true;
+					return;
+				}
+				break;
+			case "equal_to":
+				if(parseFloat(distanceLvl) == parseFloat(profileArray[s.distance_value])){
 					reason.push("Village exact distance");
-		        	hideRow = true;
-		        	return;
-	        	}
-	            break; 
+					hideRow = true;
+					return;
+				}
+				break;
 		}
 	}
 }
@@ -876,22 +861,22 @@ function distanceSettings(cell, profileArray){
 //deletes local storage for recently farmed rows
 function deleteRecentlyFarmed(){
 	$('#am_widget_Farm tr:gt(0)').each(function(i) {
-	    $(this).children("td").each(function(j){
-	    	if(j == 4){
-		    	reportLinkText = $.trim($(this).children("a").html());
+		$(this).children("td").each(function(j){
+			if(j == 4){
+				reportLinkText = $.trim($(this).children("a").html());
 				localTitle = "sitter:"+sitter+", village:"+reportLinkText+", world:"+getURL()[0];
 				if($.jStorage.get(localTitle) != null){
 					$.jStorage.deleteKey(localTitle);
 				}
 			}
-	    });
+		});
 	});
 }
 
 //gets game time to compare to reports
 function getCurrentGameTime(){
 	var serverTime = $('#serverTime').html().split(':');
-	var serverDate = $('#serverDate').html().split('/');	
+	var serverDate = $('#serverDate').html().split('/');
 	return new Date(serverDate[2], serverDate[1]-1, serverDate[0], serverTime[0], serverTime[1], serverTime[2], 0);
 }
 
@@ -1223,33 +1208,33 @@ function turnOnHotkeys(){
 			var aButton = row.children("td").eq(9).children("a");
 			var bButton = row.children("td").eq(10).children("a");
 			var cButton = row.children("td").eq(11).children("a");
-		    switch(e.which) {
-		        case keycodes.a: // a
-		        	tryClick(aButton);
-		        	break;
-		        case keycodes.b: // b
-		        	tryClick(bButton);
-		        	break;
-		        case keycodes.c: // c
-		        	tryClick(cButton);
-		        	break;
-		        case keycodes.skip: // s
-		        	row.hide();
-		        	break;
-		        case keycodes.master: // m
-		        	if(cansend && filtersApplied)
-		        		selectMasterButton(row);
-		        	break;
-		        case keycodes.left: // left
+			switch(e.which) {
+				case keycodes.a: // a
+					tryClick(aButton);
+					break;
+				case keycodes.b: // b
+					tryClick(bButton);
+					break;
+				case keycodes.c: // c
+					tryClick(cButton);
+					break;
+				case keycodes.skip: // s
+					row.hide();
+					break;
+				case keycodes.master: // m
+					if(cansend && filtersApplied)
+						selectMasterButton(row);
+					break;
+				case keycodes.left: // left
 					getNewVillage("p");
-		        	break;
-		        case keycodes.right: // right
+					break;
+				case keycodes.right: // right
 					getNewVillage("n");
-		        	break;
-		        default: return; // exit this handler for other keys
-		    }
+					break;
+				default: return; // exit this handler for other keys
+			}
 		}
-	    e.preventDefault(); // prevent the default action (scroll / move caret)
+		e.preventDefault(); // prevent the default action (scroll / move caret)
 	};
 }
 
@@ -1575,10 +1560,10 @@ function addLanguages() {
  *	Helper functions
  */
 function parseBool(value) {
-    return (typeof value === "undefined") ? 
-           false : 
-           // trim using jQuery.trim()'s source 
-           value.replace(/^\s+|\s+$/g, "").toLowerCase() === "true";
+	return (typeof value === "undefined") ?
+		false :
+		// trim using jQuery.trim()'s source
+	value.replace(/^\s+|\s+$/g, "").toLowerCase() === "true";
 }
 
 function getURL() {
@@ -1603,8 +1588,9 @@ function getFA() {
 		$.ajax({
 			type: "GET",
 			url: vlink,
-			error: function(xhr, statusText) {
-				alert("Error: " + statusText);
+			dataType: "html",
+			error: function(xhr, statusText, error) {
+				alert("Get LA error: " + error);
 				$('#fader').remove();
 				$('#loaders').remove();
 			},
@@ -1623,15 +1609,14 @@ function getFA() {
 		});
 	});
 }
-
 /*
-function getFA(){
-	fadeThanksToCheese();
-	openLoader();
-	var vlink = link[0] + window.game_data.village.id + link[1];
-	window.location = vlink;
-}
-*/
+ function getFA(){
+ fadeThanksToCheese();
+ openLoader();
+ var vlink = link[0] + window.game_data.village.id + link[1];
+ window.location = vlink;
+ }
+ */
 
 function fadeThanksToCheese() {
 	var fader = document.createElement('div');
