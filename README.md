@@ -125,6 +125,7 @@ var profile_10 = "Default";
 * Spanish
 * Arabic
 * Greek
+* Italian
 
 ###Future Improvements
 * Hide success messages, error messages, or both
