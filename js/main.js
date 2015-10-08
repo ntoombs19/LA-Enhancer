@@ -109,7 +109,7 @@ var keyPressSettings = {
 	"priorityThreeButton": "Skip",
 	"defaultButton": "Skip"
 };
-var availableLangs = ["en", "es", "el", "ar"];
+var availableLangs = ["en", "es", "el", "ar", "it"];
 
 /**********************************************************************
  *	Init script
@@ -1471,9 +1471,9 @@ function setDefaultLanguage() {
 		//case "tribalwars.dk":
 		//	$.jStorage.set("language", "da");//danish
 		//	break;
-		//case "tribals.it":
-		//	$.jStorage.set("language", "it");//italian
-		//	break;
+		case "tribals.it":
+			$.jStorage.set("language", "it");//italian
+			break;
 		//case "klanlar.org":
 		//	$.jStorage.set("language", "tr");//turkish
 		//	break;
@@ -1543,7 +1543,7 @@ function addLanguages() {
 	//$('#language').append("<option value='sk'>Slovenčina</option>");
 	//$('#language').append("<option value='hu'>Magyar</option>");
 	//$('#language').append("<option value='da'>Dansk</option>");
-	//$('#language').append("<option value='it'>Italiano</option>");
+	$('#language').append("<option value='it'>Italiano</option>");
 	//$('#language').append("<option value='tr'>Türkçe</option>");
 	//$('#language').append("<option value='fr'>Français</option>");
 	$('#language').append("<option value='es'>Español</option>");
