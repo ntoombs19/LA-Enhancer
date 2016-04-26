@@ -280,7 +280,7 @@ function getNewVillage(way) {
 		success: function(data) {
 			var v = $(data);
 			var title = data.split('<title>')[1].split('</title>')[0];
-			window.game_data = $.parseJSON(data.split("var game_data = ")[1].split("};")[0] + "}");
+			window.game_data = $.parseJSON(data.split("updateGameData(")[1].split("});")[0] + "}");
 			$('#header_info').html($('#header_info', v).html());
 			$('#topContainer').html($('#topContainer', v).html());
 			$('#contentContainer').html($('#contentContainer', v).html());
@@ -1597,7 +1597,7 @@ function getFA() {
 			success: function(data) {
 				var v = $(data);
 				var title = data.split('<title>')[1].split('</title>')[0];
-				window.game_data = $.parseJSON(data.split("var game_data = ")[1].split("};")[0] + "}");
+				window.game_data = $.parseJSON(data.split("updateGameData(")[1].split("});")[0] + "}");
 				$('#header_info').html($('#header_info', v).html());
 				$('#topContainer').html($('#topContainer', v).html());
 				$('#contentContainer').html($('#contentContainer', v).html());
