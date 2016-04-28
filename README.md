@@ -4,7 +4,7 @@ javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.githu
 </pre>
 
 ###Settings Menu
-![Settings Menu](https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/settings.jpg)
+![Settings Menu](https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/images/settings.jpg)
 
 ###What it does
 This script has 3 main features: Filtering, page loading, and key commands. As you can see in the settings panel, you have the ability to load 1 page or all pages by setting last page to 'max'. So, "load pages 1 to max" will load all the pages. The script will show you what page is currently loading so your browser won't hang. For users with a poor network connection, the page loading can take a long time so loading fewer pages at a time would probably be a good idea. When clicking A, B, or C, the row containing those buttons will be hidden. If an error occurs such as "Not enough units" or "You can only send 5 attacks per second", the row will reappear and my script will not think it has been farmed yet. By setting filters, you can farm even faster by not having to check for various factors such as the last report, wall level, estimated resources, or whether the last attack received a full or partial haul. Those "info" images will provide details as to what that particular feature will do when you hover over it. The script also includes integration with the [FA Keypress](http://forum.tribalwars.net/showthread.php?270283-FA-KeyPress) script to allow you to farm even faster. Now you can farm with the master button so you won't have to think about which button to click.
