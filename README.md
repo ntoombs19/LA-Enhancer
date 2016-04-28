@@ -1,6 +1,6 @@
 ###The script
 <pre>
-javascript:$.getScript('https://dl.dropboxusercontent.com/u/26362756/laEnhancer/main.js');void(0);
+javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.min.js');void 0;
 </pre>
 
 ###Settings Menu
