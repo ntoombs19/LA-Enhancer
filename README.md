@@ -1,17 +1,17 @@
-###The script
+### The script
 <pre>
 javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.min.js');void 0;
 </pre>
 
-###Settings Menu
+### Settings Menu
 ![Settings Menu](https://raw.githubusercontent.com/ntoombs19/LA-Enhancer/master/images/settings.jpg)
 
-###What it does
+### What it does
 This script has 3 main features: Filtering, page loading, and key commands. As you can see in the settings panel, you have the ability to load 1 page or all pages by setting last page to 'max'. So, "load pages 1 to max" will load all the pages. The script will show you what page is currently loading so your browser won't hang. For users with a poor network connection, the page loading can take a long time so loading fewer pages at a time would probably be a good idea. When clicking A, B, or C, the row containing those buttons will be hidden. If an error occurs such as "Not enough units" or "You can only send 5 attacks per second", the row will reappear and my script will not think it has been farmed yet. By setting filters, you can farm even faster by not having to check for various factors such as the last report, wall level, estimated resources, or whether the last attack received a full or partial haul. Those "info" images will provide details as to what that particular feature will do when you hover over it. The script also includes integration with the [FA Keypress](http://forum.tribalwars.net/showthread.php?270283-FA-KeyPress) script to allow you to farm even faster. Now you can farm with the master button so you won't have to think about which button to click.
 
 _Disclaimer: there is no validation for correct input. It is the users responsibility to ensure all inputs have valid values._
 
-###Filters
+### Filters
 * Load Pages: Load's a set number of pages. The first input is the start page, the second number is the end page. Setting this to max will automatically use the last page.
 * Order/Direction: Selects what the pages will be ordered by and in what direction. This setting and the load pages setting cannot be changed after running the script for the first time. To change these settings, the page will need to be reloaded and the script run again.
 * Hide farmed rows: Saves the the village coordinates of any village you send troops to using this script in the browsers cache. If this filter is enabled, the script will hide all villages that have had troops sent to it since x amount of time. The format is in minutes so for 2 hours, the input would be 120 minutes. Changing this value will not change the time for villages already in the cache but will be the timeout for villages farmed after that value was changed. It is important to note that this does not set the timer once the attack lands but rather sets the timer when the attack is sent. Clicking the reset button will only reset the rows that are loaded on the page (including hidden rows). It will not reset rows if those rows are not loaded.
@@ -26,7 +26,7 @@ _Disclaimer: there is no validation for correct input. It is the users responsib
 * Hide reports: Checked report types will be hidden.
 * Apply/Reset: Clicking "Apply Filters" will run through all the rows and hide any rows that match a filter setting. Clicking "Reset Table" will show all rows loaded even if they were hidden by clicking the button or by a filter.
 
-###Profiles
+### Profiles
 Profiles allow the user to save settings in their browsers cache for later use.
 * Create new: Creates a new profile with the current settings. The user will be prompted to set a name for the profile. Profiles cannot have the same name.
 * Set default: Sets the selected profile to the default profile.
@@ -35,13 +35,13 @@ Profiles allow the user to save settings in their browsers cache for later use.
 * Export: Retrieves a string of text containing all the settings to be pasted in a notebook, forum, or mail.
 * Import: Opens prompt to paste exported settings
 
-###Keypress Settings
+### Keypress Settings
 I stole this feature from crimsoni's [FA keypress script](http://forum.tribalwars.net/showthread.php?270283-FA-KeyPress). This aspect of the script works the same as that script. I recommend only mapping numbers, letters, and arrows for the keypress settings. Some of the characters won't show in text box the way they do on your keyboard so it may get confusing if you use anything other than the recommended keys.
 
-###Master Button Settings
+### Master Button Settings
 This is what controls what action is taken when clicking the master button. If an MBS is enabled (checked) the script will look at that MBS and perform the selected action (A, B, C, Skip) if the row matches the profile. If the row does not match the first enabled MBS profile the script will then look at the next enabled MBS profile to see if it's a match and perform the action if it is. This process will occur for each enabled MBS in order until the row matches one of the profiles and the selected action is performed. If the row matches none of the profiles then the default action will be taken.
 
-###Languages
+### Languages
 For those interested in viewing this script in a particular language, you can translate the following text into that language and I will add it to the script. Just change the text inside the quotes. Also be sure to tell me what language it is.
 <pre>
 //Language: English
@@ -120,14 +120,14 @@ var profile_08 = "Export";
 var profile_09 = "Import";
 var profile_10 = "Default";
 </pre>
-####Languages currently supported:
+#### Languages currently supported:
 * English
 * Spanish
 * Arabic
 * Greek
 * Italian
 
-###Future Improvements
+### Future Improvements
 * Hide success messages, error messages, or both
 * Asynchronous page loading
 * Sorting by wall and resources
