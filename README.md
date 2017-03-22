@@ -1,3 +1,5 @@
+## THIS IS ONLY OFFICIAL VERSION OF THIS SCRIPT AND USING ANY OTHER VERSION OF THIS SCRIPT COULD GET YOU BANNED. VERIFY WITH YOUR SERVER ADMINISTRATOR IF THIS SCRIPT IS LEGAL ON YOUR SERVER.
+
 ### The script
 <pre>
 javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.min.js');void 0;
@@ -120,6 +122,7 @@ var profile_08 = "Export";
 var profile_09 = "Import";
 var profile_10 = "Default";
 </pre>
+
 #### Languages currently supported:
 * English
 * Spanish
