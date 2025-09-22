@@ -1,4 +1,3 @@
-
 var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
 if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
 {
@@ -13,8 +12,8 @@ if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; re
 
 var version = "1.13.2";
 var scriptName = "LA Enhancer (1.13.2)";
-    var scriptURL = "https://scripts.rokorium.com/LootEnhancer/"; //Replace with your GH Pages URL
-    var updateNotesURL = "https://scripts.rokorium.com/LootEnhancer/ReadMe.md"; //Replace with your GH Pages URL
+var scriptURL = "https://ntoombs19.github.io/LA-Enhancer/";
+var updateNotesURL = "https://ntoombs19.github.io/LA-Enhancer/";
 var working = true;
 var resourcesLoaded = false;
 var scriptLoaded = false;
