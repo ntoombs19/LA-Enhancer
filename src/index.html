@@ -109,11 +109,20 @@
         </div>
 
         <h2>🚀 Installation</h2>
-        <p>Copy and paste this bookmarklet into your browser's bookmark bar, then click it while on the Farm Assistant page:</p>
+        <p>Copy and paste one of these bookmarklets into your browser's bookmark bar, then click it while on the Farm Assistant page:</p>
         
+        <h3>📦 Production Version (Recommended)</h3>
+        <p><strong>Minified and optimized for performance (35KB)</strong></p>
         <div class="script-box">
-            <button class="copy-btn" onclick="copyScript()">Copy</button>
-            <code id="script-code">javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.min.js');void 0;</code>
+            <button class="copy-btn" onclick="copyScript('minified')">Copy</button>
+            <code id="script-code-minified">javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.min.js');void 0;</code>
+        </div>
+
+        <h3>🔧 Development Version</h3>
+        <p><strong>Unminified with comments for debugging (75KB)</strong></p>
+        <div class="script-box">
+            <button class="copy-btn" onclick="copyScript('dev')">Copy</button>
+            <code id="script-code-dev">javascript:$.ajaxSetup({dataType:"script"});$.getScript('https://ntoombs19.github.io/LA-Enhancer/js/main.js');void 0;</code>
         </div>
 
         <h2>✨ Features</h2>
@@ -176,8 +185,9 @@
     </div>
 
     <script>
-        function copyScript() {
-            const scriptCode = document.getElementById('script-code');
+        function copyScript(version) {
+            const scriptCodeId = version === 'dev' ? 'script-code-dev' : 'script-code-minified';
+            const scriptCode = document.getElementById(scriptCodeId);
             const textArea = document.createElement('textarea');
             textArea.value = scriptCode.textContent;
             document.body.appendChild(textArea);
@@ -185,7 +195,8 @@
             document.execCommand('copy');
             document.body.removeChild(textArea);
             
-            const btn = document.querySelector('.copy-btn');
+            // Find the button that was clicked
+            const btn = event.target;
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
             btn.style.background = '#28a745';

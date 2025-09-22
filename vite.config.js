@@ -32,6 +32,9 @@ function copyAssetsPlugin() {
         copyFileSync('js/notify.js', 'dist/notify.js');
         copyFileSync('js/resources.js', 'dist/resources.js');
         
+        // Copy unminified version of main.js
+        copyFileSync('js/main.js', 'dist/js/main.js');
+        
         // Move index.html from src/ to root of dist/
         if (existsSync('dist/src/index.html')) {
           copyFileSync('dist/src/index.html', 'dist/index.html');
@@ -43,44 +46,48 @@ function copyAssetsPlugin() {
   };
 }
 
-export default defineConfig({
-  root: '.',
+export default defineConfig(({ mode }) => {
+  const isProduction = mode === 'production';
   
-  build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'js/main.js'),
-        index: resolve(__dirname, 'src/index.html')
-      },
-      output: {
-        entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'main' ? 'js/main.min.js' : '[name].js';
+  return {
+    root: '.',
+    
+    build: {
+      outDir: 'dist',
+      emptyOutDir: true,
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'js/main.js'),
+          index: resolve(__dirname, 'src/index.html')
         },
-        assetFileNames: 'assets/[name][extname]'
-      }
+        output: {
+          entryFileNames: (chunkInfo) => {
+            return chunkInfo.name === 'main' ? 'js/main.min.js' : '[name].js';
+          },
+          assetFileNames: 'assets/[name][extname]'
+        }
+      },
+      minify: isProduction ? 'terser' : false,
+      terserOptions: isProduction ? {
+        compress: {
+          drop_console: true,
+        },
+        format: {
+          comments: false,
+        },
+      } : {}
     },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-      format: {
-        comments: false,
-      },
-    }
-  },
-  
-  server: {
-    port: 3000,
-    open: '/src/index.html'
-  },
-  
-  preview: {
-    port: 4173,
-    open: true
-  },
-  
-  plugins: [copyAssetsPlugin()]
+    
+    server: {
+      port: 3000,
+      open: '/src/index.html'
+    },
+    
+    preview: {
+      port: 4173,
+      open: true
+    },
+    
+    plugins: [copyAssetsPlugin()]
+  };
 });
