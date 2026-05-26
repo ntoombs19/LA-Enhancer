@@ -107,7 +107,7 @@ var keyPressSettings = {
     "priorityThreeButton": "Skip",
     "defaultButton": "Skip"
 };
-var availableLangs = ["en", "es", "el", "ar", "it"];
+var availableLangs = ["en", "es", "el", "ar", "it", "sk"];
 window.top.$.getScript(scriptURL + 'lib/jstorage.js', function () {
     window.top.$.getScript(scriptURL + "resources.js", function () {
         if (window.top.$.jStorage.get("language") == null) {
@@ -1327,6 +1327,9 @@ function setDefaultLanguage() {
         case"tribalwars.ae":
             window.top.$.jStorage.set("language", "ar");
             break;
+        case"divoke-kmene.sk":
+            window.top.$.jStorage.set("language", "sk");
+            break;
         default:
             window.top.$.jStorage.set("language", "en");
             break;
@@ -1355,6 +1358,7 @@ function addLanguages() {
     window.top.$('#language').append("<option value='it'>Italiano</option>");
     window.top.$('#language').append("<option value='es'>EspaÃƒÂ±ol</option>");
     window.top.$('#language').append("<option value='ar'>Ã˜Â§Ã™â€žÃ™â€žÃ˜ÂºÃ˜Â© Ã˜Â§Ã™â€žÃ˜Â¹Ã˜Â±Ã˜Â¨Ã™Å Ã˜Â©</option>");
+    window.top.$('#language').append("<option value='sk'>Slovenčina</option>");
 }
 function parseBool(value) {
     return (typeof value === "undefined") ? false : value.replace(/^\s+|\s+window.top.$/g, "").toLowerCase() === "true";
