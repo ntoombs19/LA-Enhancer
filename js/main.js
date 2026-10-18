@@ -1,15 +1,3 @@
-var _____WB$wombat$assign$function_____ = function(name) {return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name)) || self[name]; };
-if (!self.__WB_pmw) { self.__WB_pmw = function(obj) { this.__WB_source = obj; return this; } }
-{
-  let window = _____WB$wombat$assign$function_____("window");
-  let self = _____WB$wombat$assign$function_____("self");
-  let document = _____WB$wombat$assign$function_____("document");
-  let location = _____WB$wombat$assign$function_____("location");
-  let top = _____WB$wombat$assign$function_____("top");
-  let parent = _____WB$wombat$assign$function_____("parent");
-  let frames = _____WB$wombat$assign$function_____("frames");
-  let opener = _____WB$wombat$assign$function_____("opener");
-
 var version = "1.13.2";
 var scriptName = "LA Enhancer (1.13.2)";
 var scriptURL = "https://ntoombs19.github.io/LA-Enhancer/";
@@ -93,9 +81,9 @@ var keyPressSettings = {
     "skip_code": 83,
     "skip_char": "S",
     "left_code": 37,
-    "left_char": "Ã¢â€ Â",
+    "left_char": "\u2190",
     "right_code": 39,
-    "right_char": "Ã¢â€ â€™",
+    "right_char": "\u2192",
     "priorityOneEnabled": true,
     "priorityOneProfile": "Default",
     "priorityOneButton": "Skip",
@@ -107,13 +95,13 @@ var keyPressSettings = {
     "priorityThreeButton": "Skip",
     "defaultButton": "Skip"
 };
-var availableLangs = ["en", "es", "el", "ar", "it", "sk"];
+var availableLangs = ["en", "es", "el", "ar", "it", "sk", "tr", "de", "fr", "hr", "sv"];
 window.top.$.getScript(scriptURL + 'lib/jstorage.js', function () {
     window.top.$.getScript(scriptURL + "resources.js", function () {
         if (window.top.$.jStorage.get("language") == null) {
             setDefaultLanguage();
         }
-        window.top.$.getScript(scriptURL + "lang/" + window.top.$.jStorage.get("language") + '.js', function () {
+        loadLanguageFiles(window.top.$.jStorage.get("language"), function () {
             console.log("init");
             checkPage();
         });
@@ -271,7 +259,7 @@ function getNewVillage(way) {
 }
 function showSettings() {
     window.top.$('head').append("<link type='text/css' rel='stylesheet' href='" + scriptURL + "css/style.css' />");
-	window.top.$("#contentContainer h3").eq(0).after(window.top.$("<div class='vis'id='settingsDiv'><table class='settingsTable'><thead><tr><th colspan='5'class='vis'style='padding:0px;'><h4> " + scriptName + " - <a href='https://web.archive.org/web/20240307223803/http://forum.tribalwars.net/showthread.php?266604-ntoombs19-s-FA-Filter'target='_blank'>" + filter_02 + "</a> - " + filter_42 + ": <select id='language'style='margin:0px;'onchange='loadLanguage(window.top.$(&quot;#language&quot;).val())'></select><span style='font-size:10px;float:right;font-weight:normal;font-style:normal'>" + filter_03 + " <a href='https://web.archive.org/web/20240307223803/http://forum.tribalwars.net/member.php?22739-ntoombs19'target='_blank'>ntoombs19</a>&nbsp;<div class='vis'style='float:right;text-align:center;line-height:100%;width:12px;height:12px;margin:0px 0px 0px 0px;position:relative;background-color:tan;opacity:.7'><a href='#'num='2'onclick='uglyHider(window.top.$(this));return false;'>-</a></div></span></h4></th></tr></thead><tbody id='settingsBody'><tr><td class='col1'style='min-width:200px'><span>" + filter_04 + "</span>&nbsp;<input type='text'value=''size='2'maxlength='3'id='start_page'>&nbsp;<span>" + filter_05 + "</span>&nbsp;<input type='text'value=''size='2'maxlength='3'id='end_page'></td><td colspan='3'><span style='font-weight:bold'>" + filter_06 + "</span>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='enable_help'></td><td rowspan='5'valign='top'><form><input type='checkbox'id='all_none'>&nbsp;<label for='all_none'style='font-weight:bold'>" + filter_07 + "</label>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='report_help'><br><input type='checkbox'id='blue'><label for='blue'><img src='graphic/dots/blue.png'>&nbsp;" + filter_08 + "</label><br><input type='checkbox'id='green'><label for='green'><img src='graphic/dots/green.png'>&nbsp;" + filter_09 + "</label><br><input type='checkbox'id='yellow'><label for='yellow'><img src='graphic/dots/yellow.png'>&nbsp;" + filter_10 + "</label><br><input type='checkbox'id='red_yellow'><label for='red_yellow'><img src='graphic/dots/red_yellow.png'>&nbsp;" + filter_11 + "</label><br><input type='checkbox'id='red_blue'><label for='red_blue'><img src='graphic/dots/red_blue.png'>&nbsp;" + filter_12 + "</label><br><input type='checkbox'id='red'><label for='red'><img src='graphic/dots/red.png'>&nbsp;" + filter_13 + "</label></form></td></tr><tr><td rowspan='2'><label for='order_by'>" + filter_14 + ":</label>&nbsp;<select id='order_by'val='distance'><option value='distance'>" + filter_15 + "</option><option value='date'>" + filter_16 + "</option></select><br><label for='direction'>" + filter_17 + ":</label>&nbsp;<select id='direction'val='desc'><option value='asc'>" + filter_18 + "</option><option value='desc'>" + filter_19 + "</option></select></td><td style='width:26px'><input type='checkbox'id='enable_hauls'></td><td style='width:110px'><label for='enable_hauls'>" + filter_20 + "</label></td><td><input type='radio'name='hauls'id='full'><label for='full'><img src='graphic/max_loot/1.png'>" + filter_21 + "</label>&nbsp;<input type='radio'name='hauls'id='partial'><label for='partial'><img src='graphic/max_loot/0.png'>" + filter_22 + "</label></td></tr><tr><td><input type='checkbox'id='enable_attacks'></td><td><label for='enable_attacks'>" + filter_23 + "</label></td><td><select id='attack_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='attack_value'size='2'maxlength='2'value=''></td></tr><tr><td rowspan='1'><span style='font-weight:bold;'>" + filter_43 + "</span></td><td><input type='checkbox'id='enable_walls'></td><td><label for='enable_walls'>" + filter_30 + "</label></td><td><select id='wall_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='wall_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox'id='next_village_no_farms'><label for='next_village_no_farms'>" + filter_39 + "</label></td><td><input type='checkbox'id='enable_distances'></td><td><label for='enable_distances'>" + filter_31 + "</label></td><td><select id='distance_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='distance_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox' id='next_village_units' />" + filter_44 + "</td><td><input type='checkbox' id='enable_continents' /><td colspan='3'><select id='continent_display'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='continents_list'>" + filter_34 + "</label>&nbsp;<input type='text'size='2'maxlength='150'id='continents_list'value=''>&nbsp;<img src='graphic/questionmark.png'height='13'id='continent_help'></td></tr><tr><td><input type='checkbox' id='next_village_scouts' /><input type='text' size='2' id='scouts_left' /> " + filter_45 + "</td><td><input type='checkbox'id='enable_scout'></td><td colspan='3'><label for='enable_scout'>" + filter_35 + "</label>&nbsp;<select id='scout_report_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='haul_value'size='9'maxlength='7'value=''></td></tr><tr><td><input type='checkbox' id='next_village_farming_troops' /><input type='text' size='2' id='farming_troops_left' /> " + filter_46 + "</td><td><input type='checkbox'id='enable_time'></td><td colspan='3'><select id='attack_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='enable_time'>" + filter_36 + "</label>&nbsp;<input type='text'id='time_value'size='2'maxlength='4'value=''><span>" + filter_37 + "</span></td></tr><tr><td><input type='checkbox'id='enable_auto_run'><label for='enable_autoRun'>" + filter_38 + "</label></td><td><input type='checkbox' id='hide_recent_farms' /></td><td colspan='3'><select id='sent_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;" + filter_47 + " <input type='text' size='2' id='hide_recent_time' /> " + filter_48 + "</td></tr><tr><th>" + filter_49 + "</th><th colspan='4'>" + filter_50 + "</th></tr><tr><td rowspan='4'><table><tr class='hotkey_values'><td><a href='#'onclick='return setKeyEditMode(\"A\")'id='button_a'class='farm_icon farm_icon_a'></a></td><td><a href='#'onclick='return setKeyEditMode(\"B\")'id='button_b'class='farm_icon farm_icon_b'></a></td><td><a href='#'onclick='return setKeyEditMode(\"C\")'id='button_c'class='farm_icon farm_icon_c'></a></td><td><a href='#'onclick='return setKeyEditMode(\"Master\")'id='button_master'class='farm_icon farm_icon_m'></a></td></tr><tr class='hotkey_values'><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_a'value='A'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_b'value='B'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_c'value='C'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_master'value='M'></td></tr><tr class='hotkey_values'><td colspan='2'><input class='btn tooltip'onclick='return setKeyEditMode(\"Skip\")'type='button'value='Skip'style='margin:0px 0px 0px 0px'title='" + filter_51 + "'></td><td><input class='btn tooltip'onclick='return setKeyEditMode(\"Left\")'type='button'value='Ã¢â€¡Å¡'style='margin:0px 0px 0px 0px'title='" + filter_52 + "'></td><td><input class='btn tooltip'type='button'onclick='return setKeyEditMode(\"Right\")'value='Ã¢â€¡â€º'style='margin:0px 0px 0px 0px'title='" + filter_53 + "'></td></tr><tr class='hotkey_values'><td colspan='2'><input type='text'class='hotkey_value' READONLY id='hotkey_value_skip'value='S'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_left'value='&#8592;'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_right'value='&#8594;'></td></tr></table></td><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityOneEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityOneProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityOneButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityTwoEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityTwoProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityTwoButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityThreeEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityThreeProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityThreeButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td colspan='4'>" + filter_60 + " <select id='defaultButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td colspan='5'><div style='float:left'><input type='submit'value='" + profile_02 + "'onclick='applySettings()'>&nbsp;<input type='submit'value='" + profile_03 + "'onclick='resetTable()'></div><div style='float:right'><img src='graphic/questionmark.png'width='13'height='13'id='profile_help'>&nbsp;<label for='settingsProfile'>" + profile_01 + ":</label>&nbsp;<select id='settingsProfile'onchange='changeProfile(window.top.$(&quot;#settingsProfile&quot;).val())'></select>&nbsp;<input type='submit'value='" + profile_04 + "'onclick='createProfile()'>&nbsp;<input type='submit'value='" + profile_05 + "'onclick='setDefaultProfile()'>&nbsp;<input type='submit'value='" + profile_06 + "'onclick='deleteProfile()'>&nbsp;<input type='submit'value='" + profile_07 + "'onclick='updateProfile()'>&nbsp;<input type='submit'value='" + profile_08 + "'onclick='exportProfile()'>&nbsp;<input type='submit'value='" + profile_09 + "'onclick='importProfile()'></div></td></tr></tbody></table></div>"));
+	window.top.$("#contentContainer h3").eq(0).after(window.top.$("<div class='vis'id='settingsDiv'><table class='settingsTable'><thead><tr><th colspan='5'class='vis'style='padding:0px;'><h4> " + scriptName + " - <a href='https://forum.tribalwars.net/index.php?threads/la-enhancer-ntoombs19s-fa-filter.266604/'target='_blank'>" + filter_02 + "</a> - " + filter_42 + ": <select id='language'style='margin:0px;'onchange='loadLanguage(window.top.$(&quot;#language&quot;).val())'></select><span style='font-size:10px;float:right;font-weight:normal;font-style:normal'>" + filter_03 + " <a href='https://github.com/ntoombs19'target='_blank'>ntoombs19</a>&nbsp;<div class='vis'style='float:right;text-align:center;line-height:100%;width:12px;height:12px;margin:0px 0px 0px 0px;position:relative;background-color:tan;opacity:.7'><a href='#'num='2'onclick='uglyHider(window.top.$(this));return false;'>-</a></div></span></h4></th></tr></thead><tbody id='settingsBody'><tr><td class='col1'style='min-width:200px'><span>" + filter_04 + "</span>&nbsp;<input type='text'value=''size='2'maxlength='3'id='start_page'>&nbsp;<span>" + filter_05 + "</span>&nbsp;<input type='text'value=''size='2'maxlength='3'id='end_page'></td><td colspan='3'><span style='font-weight:bold'>" + filter_06 + "</span>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='enable_help'></td><td rowspan='5'valign='top'><form><input type='checkbox'id='all_none'>&nbsp;<label for='all_none'style='font-weight:bold'>" + filter_07 + "</label>&nbsp;<img src='graphic/questionmark.png'width='13'height='13'id='report_help'><br><input type='checkbox'id='blue'><label for='blue'><img src='graphic/dots/blue.png'>&nbsp;" + filter_08 + "</label><br><input type='checkbox'id='green'><label for='green'><img src='graphic/dots/green.png'>&nbsp;" + filter_09 + "</label><br><input type='checkbox'id='yellow'><label for='yellow'><img src='graphic/dots/yellow.png'>&nbsp;" + filter_10 + "</label><br><input type='checkbox'id='red_yellow'><label for='red_yellow'><img src='graphic/dots/red_yellow.png'>&nbsp;" + filter_11 + "</label><br><input type='checkbox'id='red_blue'><label for='red_blue'><img src='graphic/dots/red_blue.png'>&nbsp;" + filter_12 + "</label><br><input type='checkbox'id='red'><label for='red'><img src='graphic/dots/red.png'>&nbsp;" + filter_13 + "</label></form></td></tr><tr><td rowspan='2'><label for='order_by'>" + filter_14 + ":</label>&nbsp;<select id='order_by'val='distance'><option value='distance'>" + filter_15 + "</option><option value='date'>" + filter_16 + "</option></select><br><label for='direction'>" + filter_17 + ":</label>&nbsp;<select id='direction'val='desc'><option value='asc'>" + filter_18 + "</option><option value='desc'>" + filter_19 + "</option></select></td><td style='width:26px'><input type='checkbox'id='enable_hauls'></td><td style='width:110px'><label for='enable_hauls'>" + filter_20 + "</label></td><td><input type='radio'name='hauls'id='full'><label for='full'><img src='graphic/max_loot/1.png'>" + filter_21 + "</label>&nbsp;<input type='radio'name='hauls'id='partial'><label for='partial'><img src='graphic/max_loot/0.png'>" + filter_22 + "</label></td></tr><tr><td><input type='checkbox'id='enable_attacks'></td><td><label for='enable_attacks'>" + filter_23 + "</label></td><td><select id='attack_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='attack_value'size='2'maxlength='2'value=''></td></tr><tr><td rowspan='1'><span style='font-weight:bold;'>" + filter_43 + "</span></td><td><input type='checkbox'id='enable_walls'></td><td><label for='enable_walls'>" + filter_30 + "</label></td><td><select id='wall_operator'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='wall_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox'id='next_village_no_farms'><label for='next_village_no_farms'>" + filter_39 + "</label></td><td><input type='checkbox'id='enable_distances'></td><td><label for='enable_distances'>" + filter_31 + "</label></td><td><select id='distance_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='distance_value'size='2'maxlength='2'value=''></td></tr><tr><td><input type='checkbox' id='next_village_units' />" + filter_44 + "</td><td><input type='checkbox' id='enable_continents' /><td colspan='3'><select id='continent_display'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='continents_list'>" + filter_34 + "</label>&nbsp;<input type='text'size='2'maxlength='150'id='continents_list'value=''>&nbsp;<img src='graphic/questionmark.png'height='13'id='continent_help'></td></tr><tr><td><input type='checkbox' id='next_village_scouts' /><input type='text' size='2' id='scouts_left' /> " + filter_45 + "</td><td><input type='checkbox'id='enable_scout'></td><td colspan='3'><label for='enable_scout'>" + filter_35 + "</label>&nbsp;<select id='scout_report_operator'val='greater_than'><option value='greater_than'>" + filter_24 + "</option><option value='less_than'>" + filter_25 + "</option><option value='equal_to'>" + filter_26 + "</option></select>&nbsp;<input type='text'id='haul_value'size='9'maxlength='7'value=''></td></tr><tr><td><input type='checkbox' id='next_village_farming_troops' /><input type='text' size='2' id='farming_troops_left' /> " + filter_46 + "</td><td><input type='checkbox'id='enable_time'></td><td colspan='3'><select id='attack_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;<label for='enable_time'>" + filter_36 + "</label>&nbsp;<input type='text'id='time_value'size='2'maxlength='4'value=''><span>" + filter_37 + "</span></td></tr><tr><td><input type='checkbox'id='enable_auto_run'><label for='enable_autoRun'>" + filter_38 + "</label></td><td><input type='checkbox' id='hide_recent_farms' /></td><td colspan='3'><select id='sent_time_filter'val='hide'><option value='hide'>" + filter_32 + "</option><option value='show'>" + filter_33 + "</option></select>&nbsp;" + filter_47 + " <input type='text' size='2' id='hide_recent_time' /> " + filter_48 + "</td></tr><tr><th>" + filter_49 + "</th><th colspan='4'>" + filter_50 + "</th></tr><tr><td rowspan='4'><table><tr class='hotkey_values'><td><a href='#'onclick='return setKeyEditMode(\"A\")'id='button_a'class='farm_icon farm_icon_a'></a></td><td><a href='#'onclick='return setKeyEditMode(\"B\")'id='button_b'class='farm_icon farm_icon_b'></a></td><td><a href='#'onclick='return setKeyEditMode(\"C\")'id='button_c'class='farm_icon farm_icon_c'></a></td><td><a href='#'onclick='return setKeyEditMode(\"Master\")'id='button_master'class='farm_icon farm_icon_m'></a></td></tr><tr class='hotkey_values'><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_a'value='A'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_b'value='B'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_c'value='C'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_master'value='M'></td></tr><tr class='hotkey_values'><td colspan='2'><input class='btn tooltip'onclick='return setKeyEditMode(\"Skip\")'type='button'value='Skip'style='margin:0px 0px 0px 0px'title='" + filter_51 + "'></td><td><input class='btn tooltip'onclick='return setKeyEditMode(\"Left\")'type='button'value='&#8666;'style='margin:0px 0px 0px 0px'title='" + filter_52 + "'></td><td><input class='btn tooltip'type='button'onclick='return setKeyEditMode(\"Right\")'value='&#8667;'style='margin:0px 0px 0px 0px'title='" + filter_53 + "'></td></tr><tr class='hotkey_values'><td colspan='2'><input type='text'class='hotkey_value' READONLY id='hotkey_value_skip'value='S'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_left'value='&#8592;'></td><td><input type='text'class='hotkey_value' READONLY id='hotkey_value_right'value='&#8594;'></td></tr></table></td><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityOneEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityOneProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityOneButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityTwoEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityTwoProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityTwoButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td><input type='checkbox' onchange='return updateKeypressSettings();' id='priorityThreeEnabled'/></td><td colspan='3'>" + filter_54 + " <select id='priorityThreeProfile' onchange='return updateKeypressSettings();'></select> " + filter_55 + " <select id='priorityThreeButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td colspan='4'>" + filter_60 + " <select id='defaultButton' onchange='return updateKeypressSettings();'><option val='" + filter_56 + "'>" + filter_56 + "</option><option val='" + filter_57 + "'>" + filter_57 + "</option><option val='" + filter_58 + "'>" + filter_58 + "</option><option val='" + filter_59 + "'>" + filter_59 + "</option></select></td></tr><tr><td colspan='5'><div style='float:left'><input type='submit'value='" + profile_02 + "'onclick='applySettings()'>&nbsp;<input type='submit'value='" + profile_03 + "'onclick='resetTable()'></div><div style='float:right'><img src='graphic/questionmark.png'width='13'height='13'id='profile_help'>&nbsp;<label for='settingsProfile'>" + profile_01 + ":</label>&nbsp;<select id='settingsProfile'onchange='changeProfile(window.top.$(&quot;#settingsProfile&quot;).val())'></select>&nbsp;<input type='submit'value='" + profile_04 + "'onclick='createProfile()'>&nbsp;<input type='submit'value='" + profile_05 + "'onclick='setDefaultProfile()'>&nbsp;<input type='submit'value='" + profile_06 + "'onclick='deleteProfile()'>&nbsp;<input type='submit'value='" + profile_07 + "'onclick='updateProfile()'>&nbsp;<input type='submit'value='" + profile_08 + "'onclick='exportProfile()'>&nbsp;<input type='submit'value='" + profile_09 + "'onclick='importProfile()'></div></td></tr></tbody></table></div>"));
     formatSettings();
     addLanguages();
     window.top.$("#language option[value='" + window.top.$.jStorage.get("language") + "']").attr("selected", "selected");
@@ -712,8 +700,8 @@ function scoutReportSettings(cell, profileArray) {
 }
 function wallSettings(cell, profileArray) {
     if (profileArray[s.enable_walls]) {
-        var wallLvl = parseInt(cell.html());
-        if (wallLvl == '?') {
+        var wallLvl = parseInt(cell.html(), 10);
+        if (isNaN(wallLvl)) {
             wallLvl = 0;
         }
         switch (window.top.$.trim(profileArray[s.wall_operator])) {
@@ -1152,21 +1140,24 @@ function doTime(millsec) {
     }, millsec);
 }
 function editKey(e) {
-    if ((e.keyCode <= 37 && e.keyCode >= 40) || (e.keyCode <= 48 && e.keyCode >= 90)) {
-        window.top.UI.ErrorMessage("You can only enter letters, numbers, or arrows. Plese try another key.", 1500);
+    var isArrow = e.keyCode >= 37 && e.keyCode <= 40;
+    var isDigit = e.keyCode >= 48 && e.keyCode <= 57;
+    var isLetter = e.keyCode >= 65 && e.keyCode <= 90;
+    if (!(isArrow || isDigit || isLetter)) {
+        window.top.UI.ErrorMessage("You can only enter letters, numbers, or arrows. Please try another key.", 1500);
     } else {
         var keyToChar = String.fromCharCode(e.keyCode);
         if (e.keyCode == 37) {
-            keyToChar = "Ã¢â€ Â";
+            keyToChar = "\u2190";
         }
         if (e.keyCode == 38) {
-            keyToChar = "Ã¢â€ â€˜";
+            keyToChar = "\u2191";
         }
         if (e.keyCode == 39) {
-            keyToChar = "Ã¢â€ â€™";
+            keyToChar = "\u2192";
         }
         if (e.keyCode == 40) {
-            keyToChar = "Ã¢â€ â€œ";
+            keyToChar = "\u2193";
         }
         switch (keyToEdit) {
             case"A":
@@ -1330,6 +1321,9 @@ function setDefaultLanguage() {
         case"divoke-kmene.sk":
             window.top.$.jStorage.set("language", "sk");
             break;
+        case"klanlar.org":
+            window.top.$.jStorage.set("language", "tr");
+            break;
         default:
             window.top.$.jStorage.set("language", "en");
             break;
@@ -1339,11 +1333,7 @@ function loadLanguage(lang) {
     window.top.$.jStorage.set("language", lang);
     var profileList = window.top.$.jStorage.get("profileList");
     var defaultProfile = window.top.$.jStorage.get("profile:" + profile_10);
-    if (window.top.$.inArray(lang, availableLangs) < 0) {
-        lang = "en";
-    }
-    var langFile = scriptURL + "lang/" + lang + ".js";
-    window.top.$.getScript(langFile, function () {
+    loadLanguageFiles(lang, function () {
         window.top.$('#settingsDiv').remove();
         profileList[0] = profile_10;
         window.top.$.jStorage.set("profileList", profileList);
@@ -1352,13 +1342,28 @@ function loadLanguage(lang) {
         showSettings();
     });
 }
+// English is always loaded first so strings missing from a partial translation fall back to it.
+function loadLanguageFiles(lang, callback) {
+    window.top.$.getScript(scriptURL + "lang/en.js", function () {
+        if (lang == "en" || window.top.$.inArray(lang, availableLangs) < 0) {
+            callback();
+        } else {
+            window.top.$.getScript(scriptURL + "lang/" + lang + ".js", callback);
+        }
+    });
+}
 function addLanguages() {
     window.top.$('#language').append("<option value='en'>English</option>");
-    window.top.$('#language').append("<option value='el'>ÃŽâ€¢ÃŽÂ»ÃŽÂ»ÃŽÂ·ÃŽÂ½ÃŽÂ¹ÃŽÂºÃŽÂ¬</option>");
+    window.top.$('#language').append("<option value='el'>Ελληνικά</option>");
     window.top.$('#language').append("<option value='it'>Italiano</option>");
-    window.top.$('#language').append("<option value='es'>EspaÃƒÂ±ol</option>");
-    window.top.$('#language').append("<option value='ar'>Ã˜Â§Ã™â€žÃ™â€žÃ˜ÂºÃ˜Â© Ã˜Â§Ã™â€žÃ˜Â¹Ã˜Â±Ã˜Â¨Ã™Å Ã˜Â©</option>");
+    window.top.$('#language').append("<option value='es'>Español</option>");
+    window.top.$('#language').append("<option value='ar'>اللغة العربية</option>");
     window.top.$('#language').append("<option value='sk'>Slovenčina</option>");
+    window.top.$('#language').append("<option value='tr'>Türkçe</option>");
+    window.top.$('#language').append("<option value='de'>Deutsch</option>");
+    window.top.$('#language').append("<option value='fr'>Français</option>");
+    window.top.$('#language').append("<option value='hr'>Hrvatski</option>");
+    window.top.$('#language').append("<option value='sv'>Svenska</option>");
 }
 function parseBool(value) {
     return (typeof value === "undefined") ? false : value.replace(/^\s+|\s+window.top.$/g, "").toLowerCase() === "true";
@@ -1480,7 +1485,21 @@ function uglyHider(linker) {
         window.top.$('#settingsBody').toggle();
     }
 }
-
-
-}
-
+// Functions called from inline onclick/onchange attributes. The minified build
+// (main.min.js) renames or drops functions it only sees inside strings, so expose
+// them on the page window explicitly.
+window.top.applySettings = applySettings;
+window.top.resetTable = resetTable;
+window.top.changeProfile = changeProfile;
+window.top.createProfile = createProfile;
+window.top.setDefaultProfile = setDefaultProfile;
+window.top.deleteProfile = deleteProfile;
+window.top.updateProfile = updateProfile;
+window.top.exportProfile = exportProfile;
+window.top.importProfile = importProfile;
+window.top.loadLanguage = loadLanguage;
+window.top.setKeyEditMode = setKeyEditMode;
+window.top.updateKeypressSettings = updateKeypressSettings;
+window.top.uglyHider = uglyHider;
+window.top.customSendUnits = customSendUnits;
+window.top.customSendUnitsFromReport = customSendUnitsFromReport;
